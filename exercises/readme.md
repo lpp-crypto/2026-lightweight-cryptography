@@ -7,9 +7,9 @@
 Rectangle[^1] is a lightweight block cipher that appeared on eprint in 2014. It allows different implementations techniques, which you will need to see for yourself! We will compare it with Present[^2], an older but very influencial lightweight block cipher.
 
 
-[^1] *RECTANGLE: a bit-slice lightweight block cipher suitable for multiple platforms*. Wentao Zhang, Zhenzhen Bao, Dongdai Lin, Vincent Rijmen, Bohan Yang, Ingrid Verbauwhede. Sci. China Inf. Sci. 2015.  https://doi.org/10.1007/s11432-015-5459-7. Available on eprint ([eprint/2014/084](http://eprint.iacr.org/2014/084)).
+[^1]: *RECTANGLE: a bit-slice lightweight block cipher suitable for multiple platforms*. Wentao Zhang, Zhenzhen Bao, Dongdai Lin, Vincent Rijmen, Bohan Yang, Ingrid Verbauwhede. Sci. China Inf. Sci. 2015.  https://doi.org/10.1007/s11432-015-5459-7. Available on eprint ([eprint/2014/084](http://eprint.iacr.org/2014/084)).
 
-[^2] *PRESENT: An Ultra-Lightweight Block Cipher*. Andrey Bogdanov, Lars R. Knudsen, Gregor Leander, Christof Paar, Axel Poschmann, Matthew J. B. Robshaw, Yannick Seurin, C. Vikkelsoe. CHES 2007. https://doi.org/10.1007/978-3-540-74735-2_31. Available on the [https://crypto.orange-labs.fr/papers/ches2007-450.pdf](orange-labs website).
+[^2]: *PRESENT: An Ultra-Lightweight Block Cipher*. Andrey Bogdanov, Lars R. Knudsen, Gregor Leander, Christof Paar, Axel Poschmann, Matthew J. B. Robshaw, Yannick Seurin, C. Vikkelsoe. CHES 2007. https://doi.org/10.1007/978-3-540-74735-2_31. Available on the [https://crypto.orange-labs.fr/papers/ches2007-450.pdf](orange-labs website).
 
 
 
