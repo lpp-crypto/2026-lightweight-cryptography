@@ -2,9 +2,9 @@
 
 from random import randint
 
-class PIPO:
+class PIPEAU:
     def __init__(self, key_bitlength: int):
-        """Initializes a PIPO based on the key length.
+        """Initializes a PIPEAU based on the key length.
 
         Args:
             key_bitlength(int): The key length (in bits). Must be either 128, 192 or 256.
@@ -145,9 +145,9 @@ def hex_vec(x):
 if __name__ == "__main__":
     x = [randint(0, 255) for i in range(0, 16)]
     K = [randint(0, 255) for i in range(0, 16)]
-    E = PIPO(128)
+    E = PIPEAU(128)
     print("x =         ", hex_vec(x))
     print("K =         ", hex_vec(K))
     y = E.encrypt(x, K)
-    print("PIPO_K(x) = ", hex_vec(y))
+    print("PIPEAU_K(x) = ", hex_vec(y))
 

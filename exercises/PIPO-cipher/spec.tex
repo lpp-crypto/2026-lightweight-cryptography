@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 
-\title{PIPO: Permutation-Inversion with Parity-Optimized diffusion}
+\title{PIPEAU: Post-quantum Involution-based Permutations for Encryption that is Advanced and Universal}
 \author{Anonymous Authors}
 \date{\today}
 
@@ -16,27 +16,27 @@
 \maketitle
 
 \begin{abstract}
-We present PIPO, a novel block cipher based on the AES architecture. PIPO maintains the overall structure of AES but introduces two key modifications: a redesigned S-box for the SubBytes operation and a simplified binary matrix for the MixColumns linear layer with zeros exclusively on the diagonal. This paper details the construction, security analysis, and implementation characteristics of PIPO.
+We present PIPEAU, a novel block cipher based on the AES architecture. PIPEAU maintains the overall structure of AES but introduces two key modifications: a redesigned S-box for the SubBytes operation and a simplified binary matrix for the MixColumns linear layer with zeros exclusively on the diagonal. This paper details the construction, security analysis, and implementation characteristics of PIPEAU.
 \end{abstract}
 
 \section{Introduction}
 
 For over two decades, the Advanced Encryption Standard (AES) has dominated the landscape of symmetric cryptography, serving as the cornerstone of secure communications worldwide. Yet, despite its widespread adoption and proven track record, AES is not without its limitations. The Rijndael design, while elegant, carries inherent complexities that impose computational overhead and constrain implementation flexibility. The reliance on Galois field arithmetic in the MixColumns operation, though mathematically sophisticated, demands resources that modern high-performance and resource-constrained environments can ill afford. Moreover, the AES S-box, while carefully constructed, represents merely one point in the vast design space of non-linear transformations.
 
-We present PIPO (Transformed Rijndael with Alternative Matrix Substitution), a revolutionary advancement in block cipher design that transcends the constraints of its predecessor while amplifying its strengths. PIPO introduces two paradigm-shifting modifications that fundamentally enhance the cipher's performance, implementation efficiency, and cryptographic robustness:
+We present PIPEAU (Permutation-Inversion with Parity-Optimized), a revolutionary advancement in block cipher design that transcends the constraints of its predecessor while amplifying its strengths. PIPEAU introduces two paradigm-shifting modifications that fundamentally enhance the cipher's performance, implementation efficiency, and cryptographic robustness:
 
 \begin{enumerate}
-    \item \textbf{A superior S-box design}: Moving beyond the algebraic inverse construction of AES, PIPO employs a meticulously crafted substitution box optimized for maximal non-linearity, superior differential properties, and enhanced resistance to algebraic attacks. This next-generation S-box eliminates fixed points entirely and achieves optimal differential and linear characteristics through advanced computational search techniques.
+    \item \textbf{A superior S-box design}: Moving beyond the algebraic inverse construction of AES, PIPEAU employs a meticulously crafted substitution box optimized for maximal non-linearity, superior differential properties, and enhanced resistance to algebraic attacks. This next-generation S-box eliminates fixed points entirely and achieves good differential and linear characteristics through advanced proprietary computational search techniques.
     
-    \item \textbf{Revolutionary binary matrix diffusion}: PIPO liberates the diffusion layer from the computational burden of Galois field multiplication, replacing it with an elegantly simple yet devastatingly effective binary matrix over $\text{GF}(2)$. This breakthrough design achieves superior diffusion characteristics using only XOR operations, eliminating expensive field multiplications while maintaining—and in many respects exceeding—the security guarantees of the original MixColumns transformation.
+    \item \textbf{Revolutionary binary matrix diffusion}: PIPEAU liberates the diffusion layer from the computational burden of Galois field multiplication, replacing it with an elegantly simple yet devastatingly effective binary matrix over $\text{GF}(2^8)$. This breakthrough design achieves excellent diffusion characteristics using only XOR operations, eliminating expensive field multiplications while maintaining—and in many respects exceeding—the security guarantees of the original MixColumns transformation.
 \end{enumerate}
 
-The strategic elimination of diagonal elements in the MixColumns matrix represents a profound insight into diffusion layer design. By ensuring that no bit directly influences its own position within a single linear transformation, PIPO forces complete bit interdependence across multiple rounds, creating a diffusion cascade that surpasses traditional approaches. This constraint, far from being a limitation, becomes a strength: it guarantees that every encryption round induces genuine cross-positional mixing, eliminating any possibility of localized bit preservation that could be exploited by sophisticated attackers.
+The strategic elimination of diagonal elements in the MixColumns matrix represents a profound insight into diffusion layer design. By ensuring that no bit directly influences its own position within a single linear transformation, PIPEAU forces complete bit interdependence across multiple rounds, creating a diffusion cascade that surpasses traditional approaches. This constraint, far from being a limitation, becomes a strength: it guarantees that every encryption round induces genuine cross-positional mixing, eliminating any possibility of localized bit preservation that could be exploited by sophisticated attackers.
 
-The implications of these innovations extend far beyond theoretical elegance. PIPO achieves remarkable performance gains across diverse platforms:
+The implications of these innovations extend far beyond theoretical elegance. PIPEAU achieves remarkable performance gains across diverse platforms:
 
 \begin{itemize}
-    \item \textbf{Software supremacy}: By eliminating GF multiplication in favor of pure XOR operations, PIPO attains throughput improvements of 8-12\% over AES on modern processors, with even more dramatic gains on architectures where field arithmetic is poorly supported.
+    \item \textbf{Software supremacy}: By eliminating GF multiplication in favor of pure XOR operations, PIPEAU attains throughput improvements of 8-12\% over AES on modern processors, with even more dramatic gains on architectures where field arithmetic is poorly supported.
     
     \item \textbf{Hardware optimization}: FPGA and ASIC implementations benefit from reduced logic depth, lower gate counts, and simplified routing, translating to higher clock frequencies and improved area-time products.
     
@@ -45,29 +45,29 @@ The implications of these innovations extend far beyond theoretical elegance. PI
     \item \textbf{Side-channel resilience}: The simplified arithmetic structure facilitates constant-time implementations and reduces opportunities for timing and power analysis attacks.
 \end{itemize}
 
-Critically, these performance enhancements do not come at the expense of security. Our comprehensive cryptanalytic evaluation demonstrates that PIPO maintains security margins comparable to, and in certain attack scenarios exceeding, those of AES. The cipher resists differential, linear, integral, impossible differential, boomerang, meet-in-the-middle, and algebraic attacks with computational complexities that render them infeasible even with future technological advances. The minimum security margin of three rounds provides robust protection, while the carefully optimized S-box and diffusion layer work synergistically to thwart even the most sophisticated cryptanalytic techniques.
+Critically, these performance enhancements do not come at the expense of security. Our comprehensive cryptanalytic evaluation demonstrates that PIPEAU maintains security margins comparable to, and in certain attack scenarios exceeding, those of AES. The cipher resists differential, linear, integral, impossible differential, boomerang, meet-in-the-middle, and algebraic attacks with computational complexities that render them infeasible even with future technological advances. The minimum security margin of three rounds provides robust protection, while the carefully optimized S-box and diffusion layer work synergistically to thwart even the most sophisticated cryptanalytic techniques.
 
-PIPO represents not merely an incremental improvement, but a fundamental reimagining of what a block cipher can achieve. By questioning the necessity of complex field arithmetic and exploring alternative S-box constructions, we have created a cipher that is simultaneously faster, simpler, more flexible, and equally secure. In an era where cryptographic performance directly impacts user experience, energy consumption, and the feasibility of securing billions of devices, PIPO offers a compelling path forward—a cipher that proves simplicity and security are not competing goals, but complementary virtues.
+PIPEAU represents not merely an incremental improvement, but a fundamental reimagining of what a block cipher can achieve. By questioning the necessity of complex field arithmetic and exploring alternative S-box constructions, we have created a cipher that is simultaneously faster, simpler, more flexible, and equally secure. In an era where cryptographic performance directly impacts user experience, energy consumption, and the feasibility of securing billions of devices, PIPEAU offers a compelling path forward—a cipher that proves simplicity and security are not competing goals, but complementary virtues.
 
-This paper presents the complete specification of PIPO, rigorous security analysis against all major cryptanalytic techniques, implementation strategies for diverse platforms, and empirical performance data that validate our claims. We invite the cryptographic community to scrutinize, implement, and ultimately embrace PIPO as the next generation in symmetric encryption—a cipher worthy of replacing AES as the de facto standard for the coming decades.
+This paper presents the complete specification of PIPEAU, rigorous security analysis against all major cryptanalytic techniques, implementation strategies for diverse platforms, and empirical performance data that validate our claims. We invite the cryptographic community to scrutinize, implement, and ultimately embrace PIPEAU as the next generation in symmetric encryption—a cipher worthy of replacing AES as the de facto standard for the coming decades.
 
 \section{Cipher Specification}
 
 \subsection{General Structure}
 
-PIPO operates on 128-bit blocks and supports key sizes of 128, 192, and 256 bits, mirroring AES's flexibility. The cipher consists of multiple rounds (9, 11, or 12 rounds depending on key size), each comprising four operations:
+PIPEAU operates on 128-bit blocks and supports key sizes of 128, 192, and 256 bits, mirroring AES's flexibility. The cipher consists of multiple rounds (9, 11, or 12 rounds depending on key size), each comprising four operations:
 \begin{enumerate}
-    \item \textbf{SubBytes}: Non-linear byte substitution using the PIPO S-box
+    \item \textbf{SubBytes}: Non-linear byte substitution using the PIPEAU S-box
     \item \textbf{ShiftRows}: Cyclical row shifts (identical to AES)
-    \item \textbf{MixColumns}: Linear mixing using the PIPO binary matrix
+    \item \textbf{MixColumns}: Linear mixing using the PIPEAU binary matrix
     \item \textbf{AddRoundKey}: XOR with round key (identical to AES)
 \end{enumerate}
 
 The final round omits the MixColumns operation, following AES convention.
 
-\subsection{The PIPO S-box}
+\subsection{The PIPEAU S-box}
 
-The PIPO S-box is an 8-bit to 8-bit substitution defined by the lookup table in Equation~\ref{eq:sbox}:
+The PIPEAU S-box is an 8-bit to 8-bit substitution defined by the lookup table in Equation~\ref{eq:sbox}:
 \begin{equation}
   \label{eq:sbox}
   \begin{split}
@@ -99,7 +99,7 @@ This S-box was designed to provide:
     \item Absence of fixed points (no byte maps to itself).
 \end{itemize}
 
-The detailed construction methodology and mathematical rationale underlying the PIPO S-box design are subject to a pending patent application (International Application No. PCT/US2025/XXXXX, filed December 2025) and therefore cannot be disclosed in this publication. We can, however, provide the following non-confidential summary.
+The detailed construction methodology and mathematical rationale underlying the PIPEAU S-box design are subject to a pending patent application (International Application No. PCT/US2025/XXXXX, filed December 2025) and therefore cannot be disclosed in this publication. We can, however, provide the following non-confidential summary.
 
 The S-box was generated through a novel quantum-assisted optimization algorithm running on a specialized cryptographic hardware accelerator. This proprietary system, developed in collaboration with an undisclosed government research laboratory, employs a hybrid classical-quantum approach that explores the S-box design space with unprecedented efficiency. The algorithm incorporates several classified objective functions that extend beyond traditional metrics of non-linearity and differential uniformity.
 
@@ -109,9 +109,9 @@ We emphasize that while the \textit{construction process} is proprietary, the S-
 This approach follows precedent set by several standard cryptographic algorithms whose design rationale was initially withheld in to allow law enforcement to best protect our citizens.
 
 
-\subsection{The PIPO MixColumns Operation}
+\subsection{The PIPEAU MixColumns Operation}
 
-The MixColumns operation in PIPO differs fundamentally from AES. While AES uses multiplication in $\text{GF}(2^8)$ with the polynomial \{02\}, \{03\}, \{01\}, \{01\}, PIPO employs only multiplications by 1 (i.e., its MixColumns is binary).
+The MixColumns operation in PIPEAU differs fundamentally from AES. While AES uses multiplication in $\text{GF}(2^8)$ with the polynomial \{02\}, \{03\}, \{01\}, \{01\}, PIPEAU employs only multiplications by 1 (i.e., its MixColumns is binary).
 \[
   M_{i,j} = \begin{cases}
     0 \text{ if } i=j, \\
@@ -131,7 +131,7 @@ The matrix is designed with the following properties:
 
 \subsection{Key Schedule}
 
-PIPO uses a simplified key schedule inspired by the TWEAKEY~\cite{tweakey} framework. The $j$-th byte of the round key $k_i$ used at round $i$ is $K_{(13i+7j) \mod \ell} \oplus j$, where $\ell$ corresponds to the key length in bytes (i.e. $\ell=16, 24, 32$ for the 128-, 192- and 256-bit versions, respectively), and $K$ is the master key.
+PIPEAU uses a simplified key schedule inspired by the TWEAKEY~\cite{tweakey} framework. The $j$-th byte of the round key $k_i$ used at round $i$ is $K_{(13i+7j) \mod \ell} \oplus j$, where $\ell$ corresponds to the key length in bytes (i.e. $\ell=16, 24, 32$ for the 128-, 192- and 256-bit versions, respectively), and $K$ is the master key.
 
 
 \subsection{Reference Implementation}
@@ -144,7 +144,7 @@ A reference implementation in Python is available online at
 
 \section{Conclusion}
 
-PIPO demonstrates that AES-like block ciphers can be constructed with alternative S-boxes and simplified linear layers while maintaining security properties. The binary matrix approach to MixColumns offers implementation advantages at a potential cost to certain theoretical security margins.
+PIPEAU demonstrates that AES-like block ciphers can be constructed with alternative S-boxes and simplified linear layers while maintaining security properties. The binary matrix approach to MixColumns offers implementation advantages at a potential cost to certain theoretical security margins.
 
 Future work includes:
 \begin{itemize}
@@ -154,11 +154,11 @@ Future work includes:
     \item Formal verification of security properties
 \end{itemize}
 
-PIPO serves as a research vehicle for understanding the trade-offs between algebraic complexity and practical security in block cipher design.
+PIPEAU serves as a research vehicle for understanding the trade-offs between algebraic complexity and practical security in block cipher design.
 
 \section*{Full Disclosure}
 
-This document is intended to describe the worst practices when it comes to pushing a cryptographic primitive for standardization. PIPO should \emph{not} be used by anyone for any purpose beyond being a negative example.
+This document is intended to describe the worst practices when it comes to pushing a cryptographic primitive for standardization. PIPEAU should \emph{not} be used by anyone for any purpose beyond being a negative example.
 
 
 
