@@ -30,6 +30,6 @@ Rectangle[^1] is a lightweight block cipher that appeared on eprint in 2014. It 
 
 ## Standardization
 
-The folder [PIPO-cipher](./PIPO-cipher/) contains the specification of a new family of 128-bit block ciphers that Borduria is pushing to have standardized. The specification is a simple pdf file called [spec.pdf](./PIPO-cipher/spec.pdf), and its authors have provided a reference implementation in Python in the file [reference.py](./PIPO-cipher/reference.py). This proves their good faith, right?
+The folder [PIPEAU-cipher](./PIPEAU-cipher/) contains the specification of a new family of 128-bit block ciphers that Borduria is pushing to have standardized. The specification is a simple pdf file called [spec.pdf](./PIPEAU-cipher/spec.pdf), and its authors have provided a reference implementation in Python in the file [reference.py](./PIPEAU-cipher/reference.py). This proves their good faith, right?
 
 **(Q5)** Should this algorithm be standardized? Motivate your answer.
