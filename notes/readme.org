@@ -93,8 +93,8 @@ The elephant in the room is the involvement of various governmental agencies. We
 That an algorithm is standardized is great but it absolutely *not* sufficient to trust it!
 #+END_QUOTE
 
-** TODO How can a primitive deserve trust?
-
+** How can a primitive deserve trust?
+In my opinion, it is wrong to think that a primitive should be seen as fine until it is broken. It is *entirely* on the designers to make sure that they provide solid security argument, and to ease third party cryptanalysis. An algorithm that is hard to study should, by construction, be considered insecure.
 *  A Case Study: the Lightweight Cryptography Competition
 #+BEGIN_QUOTE
 https://csrc.nist.gov/Projects/lightweight-cryptography/
@@ -108,7 +108,7 @@ In the early 2010's, NIST started to express interest in standardizing "lightwei
 
 How did we go from these dozens of algorithms to a unique standard, Ascon[fn:6]?
 
-** TODO What is "Lightweight"?
+** What is "Lightweight"?
 First things first: we need to define "lightweight". It is much harder than it seems!
 
 Here, "lightweight" should not be thought of as a property of the primitives but as one of the platforms intended to run them. It certainly shouldn't be a property of their security ("lightweight cryptography" is not "cryptographie faible", despite what some audacious official translations might lead you to believe).
@@ -171,9 +171,33 @@ To prevent such attacks, two directions must be considered at the same time.
 - Forbidden operations. :: Any operation that does not take a constant time, in particular table lookups, must be avoided at all cost!
 - Easing Counter-Measures :: Masking or threshold implementations are generic techniques that mitigate side-channel by randomizing parts of the computation. However, they are costly, and get costlier as the number of AND gates increases: this number should be minimized.
 
-** TODO The Steps of the Competition
-Let's have a look at SPARKLE [cite:@sparkle].
+** The Steps of the Competition
+I wasn't just in the front row to watch this "competition" unfold, I was somewhere on the stage! How did it go? Let's see this through the history of SPARKLE [cite:@sparkle], a candidate I co-designed. Some of this The timeline can be also be seen on the NIST website for this process:
 
+#+BEGIN_QUOTE
+[[https://csrc.nist.gov/Projects/lightweight-cryptography]]
+#+END_QUOTE
+
+- March 2014 :: During an informal presentation at the main symmetric cryptography conference (FSE), John Kelsey from NIST mentioned the start of a project on their side to standardize some "lightweight algorithms".
+- October 2016 :: NIST organized a first workshop on their campus[fn:8]. I presented a block cipher I co-designed, SPARX [cite:@sparx]; the NSA presented SIMON and SPECK [cite:@simon].
+- March 2017 :: NIST publishes a report[fn:9] stating their intention to move forward with standardization.
+- April 2018 :: ISO refuses the standardization of SIMON and SPECK
+- July 2018 :: I was invited in Luxembourg by my former team and suggested we submitted a candidate based on improvements of SPARX.
+- Late 2018 :: NIST published a call for submissions[fn:10] on a mailing list that had been setup a bit earlier[fn:11]. However, the original timeline is messed up by an American government shutdown.
+- Late February 2019 :: 56 round 1 candidates have been received, including SPARKLE,... and a SPECK-based candidate.  Cryptanalysis starts.
+- August 2019 :: NIST already moves on to Round 2 by removing those clearly unfit for purpose. 32 are left.
+- June 2020 :: The academic community publishes a special issue of the ToSC journal[fn:12] which gave an opportunity for Round 2 candidates to properly present their submission to the academic community.
+- March 2021 :: NIST announces 10 finalists. In my opinion, they made categories of primitives (do-it-all sponge, completely software optimized algorithm, completely hardware optimized algorithm, etc), and picked the most promising in each category. We asked two more implementers to join the SPARKLE team to help with hardware implementations.
+- Februry 2023 :: ASCON is announced as the winner of the competition.
+- August 2025 :: The standard describing ASCON is published.
+
+Some remarks:
+1. From its "official" start to its end, this process took *11 years*!
+2. Of the 56 candidates, 55 will most likely never be used.
+3. The cryptanalysis was significant at first, much slower in the end (the finalists were all solidly designed by teams of skilled cryptographers, algorithms with careless mistakes had been removed by that point).
+4. ASCON is a *trusted* primitive.
+5. Will deployment follow? We will see... The competition might have come too late, and the constraint niche of ASCON, while very large, is for the most part firmly occupied by the AES, which is even more trusted.
+   
 * Conclusion
 #+BEGIN_QUOTE
 How do cryptographic primitives go from a mere idea to being deployed?
@@ -203,3 +227,12 @@ The exercises in [[../exercises/]] will allow you to see "in person" the impact 
 [fn:6] [[https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf]]
 
 [fn:7] [[https://en.wikipedia.org/wiki/Microcontroller]] 
+
+[fn:8] [[https://csrc.nist.gov/Events/2016/lightweight-cryptography-workshop-2016]]
+
+[fn:9] [[https://nvlpubs.nist.gov/nistpubs/ir/2017/NIST.IR.8114.pdf]]
+[fn:10] [[https://csrc.nist.gov/csrc/media/Projects/lightweight-cryptography/documents/final-lwc-submission-requirements-august2018.pdf]]
+
+[fn:11] [[https://csrc.nist.gov/projects/lightweight-cryptography/email-list]]
+
+[fn:12] [[https://tosc.iacr.org/index.php/ToSC/issue/view/182]]
