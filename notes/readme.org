@@ -1,0 +1,140 @@
+#+TITLE: Standardization in Cryptography
+#+AUTHOR: Léo Perrin
+#+LATEX_HEADER: \usepackage{cmap}
+#+LATEX_HEADER_EXTRA: \hypersetup{pdfauthor={Léo Perrin}, pdftitle={Standardization in Cryptography}, pdfkeywords={bla}, pdfsubject={}, pdfcreator={Emacs 30.2 (Org mode 9.7.11)}, pdflang={English}}
+#+cite_export: bibtex alpha 
+#+BIBLIOGRAPHY: ./biblio.bib
+
+
+The big question we will discuss today:
+#+BEGIN_QUOTE
+How do cryptographic primitives go from a mere idea to being deployed?
+#+END_QUOTE
+
+* What Primitives are Deployed?
+** What is a primitive?
+A cryptographic primitive is a very low level algorithm with a very simple API. Examples of symmetric primitives:
+- Block ciphers :: they map an element from $\mathbb{F}_q^n$ to an element from the same set. The mapping is parameterized by a key.
+- Hash functions :: map elements from $\mathbb{F}_q^*$ to $\mathbb{F}_q^d$,
+There are many others: MACs, public permutations...
+
+#+NAME: primitives
+#+CAPTION: Where are the primitives?
+[[./figures/primitives.png]]
+
+They are intended to provide *security* at low *cost*, especially for symmetric primitives which are much less costly than their public key counterparts.
+
+Ultimately, they are parts of applications intended to provide:
+- Confidentiality :: an eavesdropper should not get any information from intercepted ciphertexts;
+- Authentication :: the receiver should be sure that the message was indeed written by its author;
+- Integrity :: it should not be feasible to modify the message during transit in a way that is not noticed.
+
+** What cryptographic algorithms are deployed "in real life"?
+*** Some Use Cases
+- Hard drive encryption :: =cryptsetup --help= gives =LUKS: aes-xts-plain64, Key: 256 bits, LUKS header hashing: sha256, RNG: /dev/urandom=
+
+- Web Encryption :: on Firefox, head to a website whose URL starts with =https=, and then click on the lock. You will find something like Figure [[fig:tls]].
+
+- Navigo Pass :: modifications (e.g., new tickets bought) must be authenticated! See failures of the Dutch one[fn:1]
+
+#+NAME: fig:tls
+#+CAPTION: The TLS information for [[https://hal.science]].
+[[./figures/tls.png]]
+*** Examples of Modern Standard Primitives
+Let us look at some common primitives.
+- AES :: Arguably one of the most common: the default choice for block ciphers. It was selected at the end of an open competition organized by the American NIST (National Institute for Standard and Technologies[fn:2], which depends on the department of commerce).
+- SHA-x, x>1 :: The primitives with these names are hash functions, but are very different from one another. SHA-2 (in fact, SHA-256, SHA-384 and SHA-512) are built similarly to SHA-1 but are so far fine. SHA-3 is built completely differently (on purpose), and has a very wide security margin. Unlike the others, SHA-3 was selected after an open competition, again organized by NIST.
+- Chacha20/Salsa20 :: Stream ciphers optimized for software implementation. The were designed withing the framework of the eStream project[fn:3].
+
+All of them are also part of the TLS standard, made by the IETF.
+*** Examples of Proprietary/Legacy Primitives
+Not all primitives used in practice are used because they have won a difficult competition. Others are the outcome of opaque processes where external input is not simply ignored, it is actively avoided. Examples include:
+- SHA-1 :: Designed by the literal NSA, now broken in practice [cite:@sha1]
+- Random Poprietary Algorithms :: car keys, OV-kart... See Table [[tab:proprietary]].
+
+Arguably the most important such set of algorithms is intended for cell phones: A5/1, A5/2 for 2G, GEAx for satellite phones. These are standardized by ETSI[fn:4]
+
+#+NAME: tab:proprietary
+#+CAPTION: The characteristics of some proprietary primitives (see [cite:@sok] for more details).
+[[./figures/proprietary.png]]
+
+* The Life Cycle of a Primitive
+Setting aside weird proprietary algorithms, the life cycle of a primitive is summarized in Figure [[fig:cycle]].
+
+#+NAME: fig:cycle
+#+CAPTION: Life cycle of a primitive
+[[./figures/cycle.png]]
+
+The entities involved are:
+- individual researchers, both from academia (i.e. people like me, Anne Canteaut, Maria Naya-Plasencia or Christina Boura) or from the industry;
+- the academic community at large, which in particular organizes the conferences and provides legitimacy for partial results;
+- companies that will handle the deployment (like Mozilla for Firefox); and
+- standardizing bodies, which are supposed to essentially organize this process.
+  
+** Standardizing Bodies
+As we have seen, setting aside the case of cell phones, a big difference between common (and good) algorithms and proprietary algorithms is their standardization by a reputable standardizing body.
+
+These can be national or regional in nature (NIST, also one in Japan, China...), or international (ISO, IETF). The important thing to know is the *process* used to choose primitives: different bodies use different approaches.
+
+- NIST :: In practice, at this stage, the most important! Some of their standards are arguably the best (AES, SHA-3). Others, much less so (DUAL-EC), as we will see below. Decisions are ultimately made by NIST, after consulting with the NSA, however, public input is usually sought, and listened to.
+  
+- ISO :: Essentially a diplomatic institution: often, one country/one vote. Decisions go through a lot of red tape, which is not necessarily a bad thing. Public input is not sought, but we (academic) can find ways in the discussions.
+
+- IETF :: The Internet Engineering Task Force is a public forum/mailing list[fn:5] where discussion are made, and eventually where standards are discussed. These are called "RFCs".
+  
+** When primitives don't follow this cycle
+The elephant in the room is the involvement of various governmental agencies. We know for example thanks to Snowden that the NSA had a significant budget (as in, many millions of dollars) allocated to tampering with cryptography standardization. More concretely, at this stage, we know that the following algorithms are highly suspicious.
+- A5/2 :: this stream cipher was part of the 2G standard, and has an effective key size of 2^40 in way that can only be intentional. It is backdoored.
+- GEA :: this stream cipher was part of satellite phone standards, and has an effective key length of 2^40 (see [cite:@gea]). It is backdoored.
+- DUAL-EC :: this PRNG was standardized by the NIST under pressure from the NSA. See [cite:@dualec] for more details on DUAL-EC itself, and [cite:@juniper] for a detailed example of why the whole idea was a bad one. It implements a very crude backdoor.
+- Current Russian Standards :: Streebog (hash function) and Kuznyechik (block cipher) are the current standards in Russia, and have been for about 10 years. Its designers have repeatedly lied in public about the generation process of the their S-box [cite:@partitions;@anomalies].
+
+#+BEGIN_QUOTE
+That an algorithm is standardized is great but it absolutely *not* sufficient to trust it!
+#+END_QUOTE
+
+** TODO How can a primitive deserve trust?
+
+
+*  A Case Study: the Lightweight Cryptography Competition
+#+BEGIN_QUOTE
+https://csrc.nist.gov/Projects/lightweight-cryptography/
+#+END_QUOTE
+
+In the early 2010's, NIST started to express interest in standardizing "lightweight" algorithms. By that point, many such algorithms had been published at academic conferences (see Figure [[fig:published]]).
+
+#+NAME: fig:published
+#+CAPTION: The number of "lightweight" symmetric primitives published at academic conferences between 1994 and 2017 (from [cite:@sok]).
+[[./figures/published.png]]
+
+How did we go from these dozens of algorithms to a unique standard, Ascon[fn:6]?
+
+** What is "Lightweight"?
+
+** The Steps of the Competition
+Let's have a look at SPARKLE [cite:@sparkle].
+* Conclusion
+#+BEGIN_QUOTE
+How do cryptographic primitives go from a mere idea to being deployed?
+#+END_QUOTE
+
+We can provide various points to answer this question:
+1. An *overwhelming* majority of cryptographic primitives that are thought by cryptographers (however skilled they might be) are *never* deployed (and that's OK!).
+2. The primitives that are deployed correspond to specific needs which can only be identified through discussion with intended "deployers", and which can only be satisfied through discussions with implementers.
+3. It is necessary to have a deep understanding of the constraints imposed by intended use to build a primitive which is both "efficient" and "secure" since the meaning of both is highly context-dependent. For instance, what is "lightweight"?
+4. Not all standards deserve trust, some in fact absolutely *do not* deserve any.
+
+#+PRINT_BIBLIOGRAPHY: 
+* Footnotes 
+
+[fn:1]  [[https://www.theregister.com/2008/04/16/dutch_transit_card_crippled/]].
+
+[fn:2] [[https://www.nist.gov/]].
+
+[fn:3] See wikipedia: [[https://en.wikipedia.org/wiki/ESTREAM]].
+
+[fn:4] European Telecommunications Standards Institute.
+
+[fn:5] In fact, you can sign up/check it for yourselves: [[https://datatracker.ietf.org/rg/cfrg/about/]].
+
+[fn:6] [[https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf]]
