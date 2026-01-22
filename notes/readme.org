@@ -1,4 +1,4 @@
-#+TITLE: Standardization in Cryptography
+#+TITLE: Standardization in Cryptography: the Case of Lightweight Cryptography
 #+AUTHOR: Léo Perrin
 #+LATEX_HEADER: \usepackage{cmap}
 #+LATEX_HEADER_EXTRA: \hypersetup{pdfauthor={Léo Perrin}, pdftitle={Standardization in Cryptography}, pdfkeywords={bla}, pdfsubject={}, pdfcreator={Emacs 30.2 (Org mode 9.7.11)}, pdflang={English}}
@@ -95,7 +95,6 @@ That an algorithm is standardized is great but it absolutely *not* sufficient to
 
 ** TODO How can a primitive deserve trust?
 
-
 *  A Case Study: the Lightweight Cryptography Competition
 #+BEGIN_QUOTE
 https://csrc.nist.gov/Projects/lightweight-cryptography/
@@ -109,10 +108,72 @@ In the early 2010's, NIST started to express interest in standardizing "lightwei
 
 How did we go from these dozens of algorithms to a unique standard, Ascon[fn:6]?
 
-** What is "Lightweight"?
+** TODO What is "Lightweight"?
+First things first: we need to define "lightweight". It is much harder than it seems!
 
-** The Steps of the Competition
+Here, "lightweight" should not be thought of as a property of the primitives but as one of the platforms intended to run them. It certainly shouldn't be a property of their security ("lightweight cryptography" is not "cryptographie faible", despite what some audacious official translations might lead you to believe).
+
+*** The case of software
+For software, a "lightweight" platform is a micro-controller[fn:7], i.e., a small processor with limited frequency, limited word-size (as low as 8 bits), limited ROM and RAM, a limited amount of registers, and possibly a low amount of total energy available (small battery).
+
+A primitive suitable for such environments must have the following properties.
+- Low code size :: the full implementation should not take too much space in the non-volatile memory since this space must be saved for the rest of the logic.
+- Low number of clock cycle/byte :: Since the frequency is low, a high number of clock cycles means a very slow encryption/decryption/authentication. It also means a higher amount of energy is used in total.
+- Low RAM consumption :: RAM consumption should a priori not be a big requirement (cryptographic primitives typically use a tiny amount), however, loading and fetching data in the RAM is much slower. Thus, RAM interactions must be kept at a minimum.
+
+A primitive optimized for software must thus run well on 8-, 16- and 32-bit micro-controllers, and ideally fit in the registers of the smallest micro-controllers. A careful analysis of the number of cycles needed for each operation must also be made: on a laptop, rotating a 32-bit integer by any amount takes one CPU cycle. On micro-controllers, it depends: it can be literally free if the amount is a multiple of 8, or extremely expensive since some platforms only provide a shift by 1 for 8-bit words.
+
+Which of the following lines is "lightweight"?
+
+#+BEGIN_SRC C
+  uint8_t lut[256] = {99, 124, 119, 123, ... 176, 84, 187, 22};
+  uint32_t state[2] = {0, 0};
+  for (unsigned int r=0; r<8; r++)
+  {
+      state[0] ^= lut[state[1] & 0xFF];
+      state[0] = ((state[0] << 12) | (state[0] >> 20)) & 0xFFFFFFFF;
+      state[1] ^= state[0];
+      state[0] += state[1] << 8;
+  }          
+#+END_SRC
+
+*** The case of hardware 
+This one is a bit more vague since "hardware" can mean different things. One of the main use cases corresponds to RFID tags. In general, in this case, we want to have the following properties.
+
+- Low total state size :: registers that can be updated are more expensive than fixed values, both in terms of circuit manufacturing cost and in terms of energy consumption.
+- Low number of logical gates :: similarly, logical gates (NAND, OR,...) are what costs.
+
+On the other hand, complicated bit permutations are essentially free, and throughput is not really a concern. It is possible to further minimize the total number of gates using "serialization".
+
+#+NAME: fig:serialized
+#+CAPTION: Principle of a serialized implementation.
+[[./figures/serialized.png]]
+
+
+Looking back at the previous lines, which of them are "lightweight", but for hardware?
+
+#+BEGIN_SRC C
+  uint8_t lut[256] = {99, 124, 119, 123, ... 176, 84, 187, 22};
+  uint32_t state[2] = {0, 0};
+  for (unsigned int r=0; r<8; r++)
+  {
+      state[0] ^= lut[state[1] & 0xFF];
+      state[0] = ((state[0] << 12) | (state[0] >> 20)) & 0xFFFFFFFF;
+      state[1] ^= state[0];
+      state[0] += state[1] << 8;
+  }          
+#+END_SRC
+
+*** Side-Channel Attack Prevention
+Side-channel attacks do not target an algorithm in some abstract sense, but rather a specific implementation. For instance, the electric consumption during the evaluation of =lut[x]= is correlated with the value of =x=. As a consequence, closely monitoring a circuit evaluating =lut[x ^ k]= for a secret key part =k= can reveal a lot of information about =k=.
+
+To prevent such attacks, two directions must be considered at the same time.
+- Forbidden operations. :: Any operation that does not take a constant time, in particular table lookups, must be avoided at all cost!
+- Easing Counter-Measures :: Masking or threshold implementations are generic techniques that mitigate side-channel by randomizing parts of the computation. However, they are costly, and get costlier as the number of AND gates increases: this number should be minimized.
+
+** TODO The Steps of the Competition
 Let's have a look at SPARKLE [cite:@sparkle].
+
 * Conclusion
 #+BEGIN_QUOTE
 How do cryptographic primitives go from a mere idea to being deployed?
@@ -124,10 +185,12 @@ We can provide various points to answer this question:
 3. It is necessary to have a deep understanding of the constraints imposed by intended use to build a primitive which is both "efficient" and "secure" since the meaning of both is highly context-dependent. For instance, what is "lightweight"?
 4. Not all standards deserve trust, some in fact absolutely *do not* deserve any.
 
+The exercises in [[../exercises/]] will allow you to see "in person" the impact the specifics of a cipher have on its suitability for implementation, and how a bad algorithm can be identified.
+
 #+PRINT_BIBLIOGRAPHY: 
 * Footnotes 
 
-[fn:1]  [[https://www.theregister.com/2008/04/16/dutch_transit_card_crippled/]].
+[fn:1] [[https://www.theregister.com/2008/04/16/dutch_transit_card_crippled/]].
 
 [fn:2] [[https://www.nist.gov/]].
 
@@ -138,3 +201,5 @@ We can provide various points to answer this question:
 [fn:5] In fact, you can sign up/check it for yourselves: [[https://datatracker.ietf.org/rg/cfrg/about/]].
 
 [fn:6] [[https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf]]
+
+[fn:7] [[https://en.wikipedia.org/wiki/Microcontroller]] 
