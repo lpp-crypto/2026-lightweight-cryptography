@@ -1,4 +1,5 @@
 #+TITLE: Standardization in Cryptography: the Case of Lightweight Cryptography
+#+SUBTITLE: /How do cryptographic primitives go from idea to deployment?/
 #+AUTHOR: Léo Perrin
 #+LATEX_HEADER: \usepackage{cmap}
 #+LATEX_HEADER_EXTRA: \hypersetup{pdfauthor={Léo Perrin}, pdftitle={Standardization in Cryptography}, pdfkeywords={bla}, pdfsubject={}, pdfcreator={Emacs 30.2 (Org mode 9.7.11)}, pdflang={English}}
@@ -6,11 +7,6 @@
 #+cite_export: bibtex alpha 
 #+BIBLIOGRAPHY: ./biblio.bib
 
-
-The big question we will discuss today:
-#+BEGIN_QUOTE
-How do cryptographic primitives go from a mere idea to being deployed?
-#+END_QUOTE
 
 * What Primitives are Deployed?
 ** Where is cryptography deployed "in real life"?
