@@ -10,7 +10,9 @@
 
 * What Primitives are Deployed?
 ** Where is cryptography deployed "in real life"?
-- Hard drive encryption :: =cryptsetup --help= gives =LUKS: aes-xts-plain64, Key: 256 bits, LUKS header hashing: sha256, RNG: /dev/urandom=
+- Hard drive encryption :: =cryptsetup --help= gives:
+
+   =LUKS: aes-xts-plain64, Key: 256 bits, LUKS header hashing: sha256, RNG: /dev/urandom=
 
 - Web Encryption :: on Firefox, head to a website whose URL starts with =https=, and then click on the lock. You will find something like Figure [[fig:tls]].
 
