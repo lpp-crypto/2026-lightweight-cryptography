@@ -2,6 +2,7 @@
 #+AUTHOR: Léo Perrin
 #+LATEX_HEADER: \usepackage{cmap}
 #+LATEX_HEADER_EXTRA: \hypersetup{pdfauthor={Léo Perrin}, pdftitle={Standardization in Cryptography}, pdfkeywords={bla}, pdfsubject={}, pdfcreator={Emacs 30.2 (Org mode 9.7.11)}, pdflang={English}}
+#+LATEX_HEADER_EXTRA: \RequirePackage{sectsty} \allsectionsfont{\sffamily\boldmath} \renewcommand*\descriptionlabel[1]{\hspace\labelsep \normalfont\bfseries\sffamily\boldmath #1}
 #+cite_export: bibtex alpha 
 #+BIBLIOGRAPHY: ./biblio.bib
 
@@ -12,6 +13,16 @@ How do cryptographic primitives go from a mere idea to being deployed?
 #+END_QUOTE
 
 * What Primitives are Deployed?
+** Where is cryptography deployed "in real life"?
+- Hard drive encryption :: =cryptsetup --help= gives =LUKS: aes-xts-plain64, Key: 256 bits, LUKS header hashing: sha256, RNG: /dev/urandom=
+
+- Web Encryption :: on Firefox, head to a website whose URL starts with =https=, and then click on the lock. You will find something like Figure [[fig:tls]].
+
+- Navigo Pass :: modifications (e.g., new tickets bought) must be authenticated! See failures of the Dutch one[fn:1]
+
+#+NAME: fig:tls
+#+CAPTION: The TLS information for [[https://hal.science]].
+[[./figures/tls.png]]
 ** What is a primitive?
 A cryptographic primitive is a very low level algorithm with a very simple API. Examples of symmetric primitives:
 - Block ciphers :: they map an element from $\mathbb{F}_q^n$ to an element from the same set. The mapping is parameterized by a key.
@@ -29,17 +40,6 @@ Ultimately, they are parts of applications intended to provide:
 - Authentication :: the receiver should be sure that the message was indeed written by its author;
 - Integrity :: it should not be feasible to modify the message during transit in a way that is not noticed.
 
-** What cryptographic algorithms are deployed "in real life"?
-*** Some Use Cases
-- Hard drive encryption :: =cryptsetup --help= gives =LUKS: aes-xts-plain64, Key: 256 bits, LUKS header hashing: sha256, RNG: /dev/urandom=
-
-- Web Encryption :: on Firefox, head to a website whose URL starts with =https=, and then click on the lock. You will find something like Figure [[fig:tls]].
-
-- Navigo Pass :: modifications (e.g., new tickets bought) must be authenticated! See failures of the Dutch one[fn:1]
-
-#+NAME: fig:tls
-#+CAPTION: The TLS information for [[https://hal.science]].
-[[./figures/tls.png]]
 *** Examples of Modern Standard Primitives
 Let us look at some common primitives.
 - AES :: Arguably one of the most common: the default choice for block ciphers. It was selected at the end of an open competition organized by the American NIST (National Institute for Standard and Technologies[fn:2], which depends on the department of commerce).
