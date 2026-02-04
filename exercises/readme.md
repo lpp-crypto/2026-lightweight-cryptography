@@ -4,7 +4,7 @@
 
 ## Lightweight Cryptography
 
-    PRESENT[^1] is a lightweight block cipher that was published in 2007. It is optimized for a hardware implementation, but what does it mean in practice?
+PRESENT[^1] is a lightweight block cipher that was published in 2007. It is optimized for a hardware implementation, but what does it mean in practice?
 
 [^1]: *PRESENT: An Ultra-Lightweight Block Cipher*. Andrey Bogdanov, Lars R. Knudsen, Gregor Leander, Christof Paar, Axel Poschmann, Matthew J. B. Robshaw, Yannick Seurin, C. Vikkelsoe. CHES 2007. https://doi.org/10.1007/978-3-540-74735-2_31. Available on the [https://crypto.orange-labs.fr/papers/ches2007-450.pdf](orange-labs website).
 
