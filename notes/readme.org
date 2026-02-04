@@ -21,6 +21,7 @@
 #+NAME: fig:tls
 #+CAPTION: The TLS information for [[https://hal.science]].
 [[./figures/tls.png]]
+
 ** What is a primitive?
 A cryptographic primitive is a very low level algorithm with a very simple API. Examples of symmetric primitives:
 - Block ciphers :: they map an element from $\mathbb{F}_q^n$ to an element from the same set. The mapping is parameterized by a key.
@@ -45,6 +46,7 @@ Let us look at some common primitives.
 - Chacha20/Salsa20 :: Stream ciphers optimized for software implementation. The were designed withing the framework of the eStream project[fn:3].
 
 All of them are also part of the TLS standard, made by the IETF.
+
 *** Examples of Proprietary/Legacy Primitives
 Not all primitives used in practice are used because they have won a difficult competition. Others are the outcome of opaque processes where external input is not simply ignored, it is actively avoided. Examples include:
 - SHA-1 :: Designed by the literal NSA, now broken in practice [cite:@sha1]
